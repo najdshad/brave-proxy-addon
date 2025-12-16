@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="popup-container">
+    <div class="header">
+      <h1>Proxy Switcher</h1>
+    </div>
+    
+    <div class="proxy-list">
+      <div class="proxy-item" data-proxy="direct">
+        <div class="proxy-info">
+          <span class="proxy-name">Direct Connection</span>
+          <span class="proxy-type">No proxy</span>
+        </div>
+        <button class="proxy-toggle" data-active="false">
+          <span class="toggle-indicator"></span>
+        </button>
+      </div>
+      
+      <div class="proxy-item" data-proxy="http">
+        <div class="proxy-info">
+          <span class="proxy-name">HTTP Proxy</span>
+          <span class="proxy-type">127.0.0.1:10808</span>
+        </div>
+        <button class="proxy-toggle" data-active="false">
+          <span class="toggle-indicator"></span>
+        </button>
+      </div>
+      
+      <div class="proxy-item" data-proxy="socks5">
+        <div class="proxy-info">
+          <span class="proxy-name">SOCKS5 Proxy</span>
+          <span class="proxy-type">127.0.0.1:10808</span>
+        </div>
+        <button class="proxy-toggle" data-active="false">
+          <span class="toggle-indicator"></span>
+        </button>
+      </div>
+    </div>
+    
+    <div class="auth-section">
+      <details>
+        <summary>Authentication (Optional)</summary>
+        <div class="auth-fields">
+          <input type="text" id="username" placeholder="Username">
+          <input type="password" id="password" placeholder="Password">
+        </div>
+      </details>
+    </div>
+    
+    <div class="status-indicator">
+      <span id="status-text">Direct Connection</span>
+    </div>
+  </div>
+  
+  <script src="popup.js"></script>
+</body>
+</html>
