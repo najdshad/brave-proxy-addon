@@ -5,7 +5,11 @@ chrome.runtime.onInstalled.addListener(() => {
   // Set default settings
   chrome.storage.local.set({
     activeProxy: 'direct',
-    authCredentials: { username: '', password: '' }
+    authCredentials: { username: '', password: '' },
+    proxyUrls: {
+      http: '127.0.0.1:10808',
+      socks5: '127.0.0.1:10808'
+    }
   });
 });
 

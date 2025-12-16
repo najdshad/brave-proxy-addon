@@ -94,6 +94,25 @@ body {
   color: var(--text-secondary);
 }
 
+.proxy-url {
+  background: transparent;
+  border: none;
+  font-size: 12px;
+  color: var(--text-secondary);
+  padding: 2px 4px;
+  border-radius: 3px;
+  outline: none;
+  width: 120px;
+}
+
+.proxy-url:focus {
+  background-color: var(--bg-hover);
+}
+
+.proxy-url::placeholder {
+  color: var(--text-muted);
+}
+
 .proxy-toggle {
   width: 44px;
   height: 24px;
@@ -171,6 +190,60 @@ summary:hover {
 
 .auth-fields input:focus {
   border-color: var(--accent-color);
+}
+
+.config-section {
+  margin-bottom: 16px;
+}
+
+.config-fields {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.config-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.config-item label {
+  font-size: 12px;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.config-item input {
+  padding: 8px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-size: 13px;
+  outline: none;
+}
+
+.config-item input:focus {
+  border-color: var(--accent-color);
+}
+
+.save-button {
+  padding: 8px 16px;
+  background-color: var(--accent-color);
+  color: var(--bg-primary);
+  border: none;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  margin-top: 4px;
+}
+
+.save-button:hover {
+  background-color: var(--text-muted);
 }
 
 .status-indicator {
