@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Proxy Switcher",
-  "version": "1.0",
+  "version": "1.1",
   "description": "Minimal proxy switcher for Brave",
   "permissions": ["proxy", "storage"],
   "action": {
@@ -13,5 +13,8 @@
   },
   "icons": {
     "256": "assets/icon256.png"
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
   }
 }

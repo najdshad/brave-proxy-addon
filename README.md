@@ -6,7 +6,6 @@ A minimal, resource-friendly Brave browser extension for switching between local
 
 - 🔄 **Proxy Switching**: Direct, HTTP, SOCKS5 proxy modes
 - 🌐 **URL Editing**: Inline editing and configuration panel for custom proxy URLs
-- 🔐 **Authentication**: Optional username/password support
 - 🌙 **System Theme**: Automatic dark/light mode detection
 - 🎨 **Minimal Design**: Grayscale color palette with modern UI
 - 💾 **Persistent Storage**: Settings saved across browser sessions
@@ -35,13 +34,11 @@ cd brave-proxy-addon
 1. **Click the proxy icon** in your browser toolbar
 2. **Select proxy type**: Direct, HTTP, or SOCKS5
 3. **Edit proxy URL** (optional): Click on the URL to edit inline
-4. **Add authentication** (optional): Click "⚙️" for configuration panel
-5. **Settings auto-save** for future sessions
+4. **Settings auto-save** for future sessions
 
 ### Default Configuration
 - **Proxy URL**: `127.0.0.1:10808`
 - **Types**: Direct, HTTP, SOCKS5
-- **Authentication**: Disabled by default
 
 ## Development
 
@@ -83,10 +80,7 @@ This is a minimal project with no build process required. All files are ready to
 - **SOCKS5**: SOCKS5 proxy server
 
 ### Custom Proxy URLs
-Click on any proxy URL to edit inline. Custom URLs are automatically saved to browser storage.
-
-### Authentication
-Optional username/password authentication for proxy servers. Credentials are stored locally in browser storage.
+Click on any proxy URL to edit inline. Custom URLs are automatically saved to browser storage. URLs are validated for format and port range (1-65535).
 
 ## Permissions
 
@@ -122,6 +116,12 @@ Optional username/password authentication for proxy servers. Credentials are sto
 MIT License - see [LICENSE](LICENSE) file for details.
 
 ## Changelog
+
+### v1.1.0
+- Removed authentication fields for improved security
+- Added input validation for proxy URLs (format and port range)
+- Added Content Security Policy for XSS protection
+- Sanitized console logging to reduce information leakage
 
 ### v1.0.0
 - Initial release with basic proxy switching

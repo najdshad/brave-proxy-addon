@@ -27,35 +27,18 @@ async function toggleProxy(item) {
   const toggle = item.querySelector('.proxy-toggle');
   
   try {
-    // Save auth credentials if provided
-    const username = document.getElementById('username').value;
-    const password = document.getElementById('password').value;
-    
-    if (username || password) {
-      await chrome.storage.local.set({
-        authCredentials: { username, password }
-      });
-    }
-    
-    // Set proxy configuration
     await setProxy(proxyType);
-    
-    // Update UI
     updateActiveProxyUI(proxyType);
     updateStatus(proxyType);
-    
-    // Save active proxy
     await chrome.storage.local.set({ activeProxy: proxyType });
-    
   } catch (error) {
-    console.error('Failed to set proxy:', error);
+    console.error('Failed to set proxy');
     updateStatus('error');
   }
 }
 
 async function setProxy(proxyType) {
-  const authData = await chrome.storage.local.get(['authCredentials', 'proxyUrls']);
-  const auth = authData.authCredentials || {};
+  const authData = await chrome.storage.local.get(['proxyUrls']);
   const proxyUrls = authData.proxyUrls || {
     http: '127.0.0.1:10808',
     socks5: '127.0.0.1:10808'
@@ -102,18 +85,10 @@ async function setProxy(proxyType) {
       throw new Error(`Unknown proxy type: ${proxyType}`);
   }
   
-  // Set proxy settings
   await chrome.proxy.settings.set({
     value: config,
     scope: 'regular'
   });
-  
-  // Handle authentication if needed
-  if ((proxyType === 'http' || proxyType === 'socks5') && auth.username) {
-    // Note: Chrome extensions cannot directly handle proxy authentication
-    // This would need to be handled by the proxy server or user intervention
-    console.log('Proxy authentication required:', auth.username);
-  }
 }
 
 function updateActiveProxyUI(activeProxy) {
@@ -162,21 +137,13 @@ async function updateStatus(proxyType) {
 
 async function loadSavedSettings() {
   try {
-    const data = await chrome.storage.local.get(['activeProxy', 'authCredentials', 'proxyUrls']);
+    const data = await chrome.storage.local.get(['activeProxy', 'proxyUrls']);
     
-    // Load saved auth credentials
-    if (data.authCredentials) {
-      document.getElementById('username').value = data.authCredentials.username || '';
-      document.getElementById('password').value = data.authCredentials.password || '';
-    }
-    
-    // Load saved proxy URLs
     const proxyUrls = data.proxyUrls || {
       http: '127.0.0.1:10808',
       socks5: '127.0.0.1:10808'
     };
     
-    // Update proxy URL inputs
     document.getElementById('http-url').value = proxyUrls.http;
     document.getElementById('socks5-url').value = proxyUrls.socks5;
     document.getElementById('http-url-config').value = proxyUrls.http;
@@ -184,7 +151,7 @@ async function loadSavedSettings() {
     
     return data.activeProxy || 'direct';
   } catch (error) {
-    console.error('Failed to load settings:', error);
+    console.error('Failed to load settings');
     return 'direct';
   }
 }
@@ -205,30 +172,53 @@ async function updateActiveProxy() {
     
     updateActiveProxyUI(activeProxy);
     updateStatus(activeProxy);
-    
-    // Save active proxy for persistence
     await chrome.storage.local.set({ activeProxy });
     
   } catch (error) {
-    console.error('Failed to get current proxy settings:', error);
+    console.error('Failed to get current proxy settings');
     updateStatus('error');
   }
 }
 
 function parseProxyUrl(url) {
-  // Handle both host:port and full URL formats
-  if (url.includes('://')) {
-    const urlObj = new URL(url);
-    return {
-      host: urlObj.hostname,
-      port: parseInt(urlObj.port) || 10808
-    };
+  if (!url || typeof url !== 'string') {
+    throw new Error('Invalid proxy URL');
+  }
+
+  const trimmedUrl = url.trim();
+  
+  if (trimmedUrl.includes('://')) {
+    try {
+      const urlObj = new URL(trimmedUrl);
+      const port = parseInt(urlObj.port) || 10808;
+      
+      if (port < 1 || port > 65535) {
+        throw new Error('Invalid port number');
+      }
+      
+      if (!urlObj.hostname) {
+        throw new Error('Invalid hostname');
+      }
+      
+      return {
+        host: urlObj.hostname,
+        port: port
+      };
+    } catch (error) {
+      throw new Error('Invalid proxy URL format');
+    }
   } else {
-    // Handle host:port format
-    const [host, port] = url.split(':');
+    const parts = trimmedUrl.split(':');
+    const host = parts[0] || '127.0.0.1';
+    const port = parseInt(parts[1]) || 10808;
+    
+    if (port < 1 || port > 65535) {
+      throw new Error('Invalid port number');
+    }
+    
     return {
-      host: host || '127.0.0.1',
-      port: parseInt(port) || 10808
+      host: host,
+      port: port
     };
   }
 }
